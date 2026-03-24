@@ -1,0 +1,51 @@
+# ── Dependencies ──────────────────────────────────────
+node_modules/
+.pnpm-store/
+
+# ── Environment variables ──────────────────────────────
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ── Next.js ───────────────────────────────────────────
+apps/web/.next/
+apps/web/out/
+v0/.next/
+v0/out/
+
+# ── TypeScript incremental build cache ────────────────
+*.tsbuildinfo
+
+# ── NestJS / TypeScript builds ────────────────────────
+services/*/dist/
+
+# ── Turbo ─────────────────────────────────────────────
+.turbo/
+apps/web/.turbo/
+
+# ── Playwright ────────────────────────────────────────
+apps/web/playwright-report/
+apps/web/test-results/
+apps/web/traces/
+
+# ── Docs ──────────────────────────────────────────────
+docs/
+
+# ── AWS CDK ───────────────────────────────────────────
+infrastructure/cdk/cdk.out/
+
+# ── Logs ──────────────────────────────────────────────
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# ── OS ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── IDE ───────────────────────────────────────────────
+.idea/
+*.swp
+*.swo
