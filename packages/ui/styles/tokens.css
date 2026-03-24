@@ -1,0 +1,126 @@
+/* Oppi Design System — CSS Custom Properties
+ * Generated from packages/ui/tokens/semantic.ts
+ * DO NOT edit manually — update semantic.ts instead */
+
+:root {
+  /* --- Color: Primary (Blue — Trust) --- */
+  --color-primary:         #1A6CD8;
+  --color-primary-hover:   #1250A0;
+  --color-primary-pressed: #0E3460;
+  --color-primary-focus:   #4490F0;
+  --color-primary-subtle:  #EBF3FE;
+
+  /* --- Color: Success (Green — Growth) --- */
+  --color-success:         #12B76A;
+  --color-success-hover:   #027A48;
+  --color-success-subtle:  #D1FADF;
+
+  /* --- Color: Danger (Red — Debt/Error) --- */
+  --color-danger:          #F04438;
+  --color-danger-hover:    #B42318;
+  --color-danger-subtle:   #FEE4E2;
+
+  /* --- Color: Warning (Amber) --- */
+  --color-warning:         #F79009;
+  --color-warning-hover:   #B54708;
+  --color-warning-subtle:  #FEF0C7;
+
+  /* --- Color: Premium (Purple) --- */
+  --color-premium:         #7C3AED;
+  --color-premium-subtle:  #EDE9FE;
+
+  /* --- Color: Text --- */
+  --color-text-primary:     #101828;
+  --color-text-secondary:   #344054;
+  --color-text-label:       #475467;
+  --color-text-tertiary:    #667085;
+  --color-text-placeholder: #98A2B3;
+  --color-text-inverse:     #FFFFFF;
+
+  /* --- Color: Surfaces --- */
+  --color-surface:          #FFFFFF;
+  --color-background:       #F9FAFB;
+  --color-background-subtle: #F2F4F7;
+
+  /* --- Color: Borders --- */
+  --color-border:           #D0D5DD;
+  --color-divider:          #E4E7EC;
+
+  /* --- Spacing (8pt grid) --- */
+  --spacing-micro:        4px;
+  --spacing-1:            8px;
+  --spacing-2:            12px;
+  --spacing-3:            16px;
+  --spacing-4:            24px;
+  --spacing-5:            32px;
+  --spacing-6:            48px;
+  --spacing-7:            64px;
+
+  /* --- Spacing: Semantic --- */
+  --spacing-page-padding:   16px;
+  --spacing-card-padding:   24px;
+  --spacing-card-padding-sm: 16px;
+  --spacing-section-gap:    32px;
+  --spacing-item-gap:       8px;
+  --spacing-inline-gap:     8px;
+
+  /* --- Border Radius --- */
+  --radius-button:     12px;
+  --radius-button-pill: 999px;
+  --radius-card-sm:    12px;
+  --radius-card:       16px;
+  --radius-input:      8px;
+  --radius-badge:      999px;
+  --radius-avatar:     999px;
+
+  /* --- Shadows --- */
+  --shadow-card-flat:     none;
+  --shadow-card-elevated: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover:    0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-toast:         0 4px 20px rgba(0, 0, 0, 0.10);
+  --shadow-input-focus:   0 0 0 3px rgba(26, 108, 216, 0.12);
+
+  /* --- Transitions --- */
+  --transition-button:   150ms ease;
+  --transition-card:     200ms ease;
+  --transition-progress: 400ms ease;
+
+  /* --- Touch Targets --- */
+  --touch-target-min:       44px;
+  --touch-target-preferred: 48px;
+
+  /* --- Typography --- */
+  --font-size-overline:       11px;
+  --font-size-caption:        12px;
+  --font-size-body-sm:        14px;
+  --font-size-body-secondary: 15px;
+  --font-size-body:           16px;
+  --font-size-h4:             16px;
+  --font-size-h3:             18px;
+  --font-size-h2:             22px;
+  --font-size-h1:             26px;
+  --font-size-display:        32px;
+
+  --font-weight-normal:    400;
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+  --font-weight-extrabold: 800;
+
+  --line-height-tight:    1.2;
+  --line-height-snug:     1.25;
+  --line-height-normal:   1.3;
+  --line-height-heading:  1.35;
+  --line-height-relaxed:  1.4;
+  --line-height-loose:    1.5;
+  --line-height-readable: 1.55;
+  --line-height-body:     1.6;
+
+  /* --- Breakpoints (reference only — use in media queries) ---
+   * xs:  375px  (mobile base — design here first)
+   * sm:  430px
+   * md:  768px
+   * lg:  1024px
+   * xl:  1280px
+   */
+}

@@ -1,0 +1,166 @@
+/* ── Brand panel — desktop only (lg+) ── */
+.brandPanel {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .brandPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 460px;
+    flex-shrink: 0;
+    background: var(--color-primary);
+    padding: var(--spacing-5);
+    color: var(--color-text-inverse);
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 1280px) {
+  .brandPanel {
+    width: 520px;
+    padding: var(--spacing-6);
+  }
+}
+
+/* ── Logo ── */
+.brandLogo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.brandLogoMark {
+  display: flex;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-button);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+}
+
+.brandLogoText {
+  font-size: var(--font-size-body-secondary);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+  opacity: 0.9;
+}
+
+/* ── Title + subtitle ── */
+.brandContent {
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.brandTitle {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-extrabold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+  white-space: pre-line;
+}
+
+.brandSubtitle {
+  margin-top: var(--spacing-4);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-relaxed);
+  color: rgba(255, 255, 255, 0.70);
+  max-width: 360px;
+}
+
+/* ── Step indicator ── */
+.brandSteps {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-micro);
+}
+
+.brandStep {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-micro) 0;
+}
+
+.brandStepDot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.40);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  transition: all 500ms ease;
+}
+
+.brandStepDotActive {
+  background: white;
+  color: var(--color-primary);
+  scale: 1.1;
+}
+
+.brandStepLabel {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 300ms ease;
+}
+
+.brandStepLabelActive {
+  color: white;
+}
+
+.brandStepLine {
+  height: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.20);
+  margin-left: var(--spacing-1);
+}
+
+/* ── Feature bullets ── */
+.brandFeatures {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.brandFeature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.brandFeatureIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-5);
+  height: var(--spacing-5);
+  flex-shrink: 0;
+  border-radius: var(--radius-input);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.brandFeatureText {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: rgba(255, 255, 255, 0.75);
+  line-height: var(--line-height-normal);
+}

@@ -1,0 +1,839 @@
+/* ─────────────────────────────────────────────────────────────
+   FirstEntryStep — multi-transaction entry with CSV import.
+
+   Mobile:  stacked, CTA anchored to bottom
+   Desktop: side-by-side form fields, 5-col category grid
+   ───────────────────────────────────────────────────────────── */
+
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  animation: slideInRight 0.35s ease both;
+}
+
+/* ── Mobile-only step header ── */
+.stepHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-micro);
+}
+
+.stepTitle {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+}
+
+.stepSubtitle {
+  font-size: var(--font-size-body-secondary);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ══════════════════════════════════════
+   Tab toggle — iOS-style segmented control
+══════════════════════════════════════ */
+.tabToggle {
+  display: flex;
+  gap: 4px;
+  background: var(--color-background);
+  border: 1.5px solid var(--color-divider);
+  border-radius: var(--radius-button);
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-button);
+}
+
+.tab:hover {
+  color: var(--color-text-primary);
+}
+
+.tabActive {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.tabBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-badge);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+/* ── Tab panel ── */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+/* ══════════════════════════════════════
+   Manual entry form card
+══════════════════════════════════════ */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-divider);
+}
+
+/* Amount + Note — stacked on mobile, side-by-side on desktop */
+.formTopRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+/* Shared field label */
+.fieldLabel {
+  display: block;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+
+/* Amount field */
+.amountField {
+  display: flex;
+  flex-direction: column;
+}
+
+.amountWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  background: var(--color-background);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-input);
+  padding: 0 var(--spacing-3);
+  height: 48px;
+  transition:
+    border-color var(--transition-button),
+    box-shadow var(--transition-button);
+}
+
+.amountWrap:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-input-focus);
+}
+
+.currencySymbol {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+  line-height: 1;
+  user-select: none;
+}
+
+.amountInput {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  caret-color: var(--color-primary);
+  line-height: 1;
+}
+
+.amountInput::placeholder {
+  color: var(--color-text-placeholder);
+  font-weight: var(--font-weight-normal);
+}
+
+/* Note field */
+.noteField {
+  display: flex;
+  flex-direction: column;
+}
+
+.noteInput {
+  height: 48px;
+  padding: 0 var(--spacing-3);
+  background: var(--color-background);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-input);
+  font-size: var(--font-size-body-secondary);
+  color: var(--color-text-primary);
+  outline: none;
+  box-sizing: border-box;
+  transition:
+    border-color var(--transition-button),
+    box-shadow var(--transition-button);
+}
+
+.noteInput::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.noteInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-input-focus);
+}
+
+/* ── Category grid ── */
+.categorySection {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 4 columns on mobile — 14 items = 3 full rows + 2 orphans.
+   Items 13 & 14 (Travel, Other) each span 2 cols to fill the row. */
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-1);
+}
+
+/* Last two items span 2 cols → row layout suits the extra width */
+.categoryGrid .categoryChip:nth-child(13),
+.categoryGrid .categoryChip:nth-child(14) {
+  grid-column: span 2;
+  flex-direction: row;
+  justify-content: center;
+  gap: var(--spacing-2);
+}
+
+.categoryChip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: var(--spacing-1) 4px;
+  min-height: 60px;
+  border-radius: var(--radius-button);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-background);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition:
+    border-color var(--transition-button),
+    background var(--transition-button),
+    color var(--transition-button),
+    transform var(--transition-button);
+}
+
+.categoryChip:hover {
+  border-color: var(--color-text-placeholder);
+  color: var(--color-text-primary);
+}
+
+.categoryChip:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.categoryChipSelected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.categoryChipLabel {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.categoryChipSelected .categoryChipLabel {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ── Add transaction button — secondary style ── */
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  height: 44px;
+  border-radius: var(--radius-button);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-secondary);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    background var(--transition-button),
+    border-color var(--transition-button);
+}
+
+.addButton:hover:not(:disabled) {
+  background: var(--color-background);
+  border-color: var(--color-text-placeholder);
+}
+
+.addButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.addButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ══════════════════════════════════════
+   Transaction list
+══════════════════════════════════════ */
+.txList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.txListLabel {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 var(--spacing-micro);
+  margin-bottom: var(--spacing-micro);
+}
+
+.txRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-surface);
+  border-radius: var(--radius-card-sm);
+  border: 1px solid var(--color-divider);
+  animation: fadeInUp 0.2s ease both;
+}
+
+.txIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--radius-input);
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.txMeta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.txLabel {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.txDate {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-placeholder);
+}
+
+.txAmount {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger);
+  flex-shrink: 0;
+  letter-spacing: -0.01em;
+}
+
+.txRemove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-placeholder);
+  cursor: pointer;
+  border-radius: var(--radius-input);
+  transition:
+    color var(--transition-button),
+    background var(--transition-button);
+}
+
+.txRemove:hover {
+  color: var(--color-danger);
+  background: var(--color-danger-subtle);
+}
+
+.txShowMoreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  width: 100%;
+  height: 36px;
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-button);
+  background: transparent;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition:
+    background var(--transition-button),
+    border-color var(--transition-button);
+}
+
+.txShowMoreButton:hover {
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary);
+}
+
+.txShowMoreButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ══════════════════════════════════════
+   CSV panel
+══════════════════════════════════════ */
+.csvInstructions {
+  background: var(--color-background);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--color-divider);
+}
+
+.csvInstructionsTitle {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-2);
+}
+
+.csvInstructionsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.csvInstructionsList li {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.csvInstructionsList strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Upload trigger button */
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  width: 100%;
+  min-height: 128px;
+  padding: var(--spacing-5) var(--spacing-4);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-background);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+  transition:
+    border-color var(--transition-button),
+    background var(--transition-button),
+    color var(--transition-button);
+}
+
+.uploadArea:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+.uploadArea:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.fileInputHidden {
+  display: none;
+}
+
+.uploadIcon {
+  color: var(--color-text-placeholder);
+  transition: color var(--transition-button);
+}
+
+.uploadArea:hover .uploadIcon {
+  color: var(--color-primary);
+}
+
+.uploadPrimary {
+  font-size: var(--font-size-body-secondary);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.uploadFileName {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+.uploadHint {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-placeholder);
+}
+
+/* CSV parse error */
+.csvError {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background: var(--color-danger-subtle);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 20%, transparent);
+  border-radius: var(--radius-input);
+  color: var(--color-danger-hover);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-relaxed);
+  flex-shrink: 0;
+}
+
+/* CSV preview */
+.csvPreview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-3);
+  animation: fadeInUp 0.25s ease both;
+}
+
+.csvPreviewHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-success-hover);
+}
+
+.csvPreviewList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.csvPreviewRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-background);
+  border-radius: var(--radius-card-sm);
+}
+
+.csvShowMoreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  width: 100%;
+  height: 36px;
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-button);
+  background: transparent;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition:
+    background var(--transition-button),
+    border-color var(--transition-button);
+}
+
+.csvShowMoreButton:hover {
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary);
+}
+
+.csvShowMoreButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.csvShowMoreCount {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Import button — success green (positive action: adding data) */
+.importButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 44px;
+  border-radius: var(--radius-button);
+  border: none;
+  background: var(--color-success);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-body-secondary);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    background var(--transition-button),
+    transform var(--transition-button);
+}
+
+.importButton:hover {
+  background: var(--color-success-hover);
+  transform: translateY(-1px);
+}
+
+.importButton:focus-visible {
+  outline: 2px solid var(--color-success);
+  outline-offset: 2px;
+}
+
+/* ── Spacer ── */
+.spacer {
+  flex: 1;
+  min-height: var(--spacing-3);
+}
+
+/* ══════════════════════════════════════
+   CTA
+══════════════════════════════════════ */
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding-bottom: 40px;
+  flex-shrink: 0;
+}
+
+.ctaButton {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  height: 56px;
+  border-radius: var(--radius-button);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  transition:
+    background var(--transition-button),
+    box-shadow var(--transition-button),
+    transform var(--transition-button);
+}
+
+.ctaButton:not(:disabled):hover {
+  background: var(--color-primary-hover);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-primary) 25%, transparent);
+  transform: translateY(-2px);
+}
+
+.ctaButton:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.ctaButton:disabled {
+  background: var(--color-divider);
+  color: var(--color-text-placeholder);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.ctaButton:focus-visible {
+  outline: 2px solid var(--color-primary-focus);
+  outline-offset: 2px;
+}
+
+.ctaHint {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-placeholder);
+  text-align: center;
+}
+
+/* Skip link — lowest visual priority */
+.skipLink {
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  padding: var(--spacing-micro) var(--spacing-3);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-button);
+}
+
+.skipLink:hover {
+  color: var(--color-text-secondary);
+}
+
+/* ══════════════════════════════════════
+   Desktop — genuinely redesigned layout
+══════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .wrap {
+    flex: initial;
+    gap: var(--spacing-4);
+    padding-top: var(--spacing-5);
+    padding-bottom: 0;
+    max-width: 640px;
+  }
+
+  /* Brand panel handles this context on desktop */
+  .stepHeader {
+    display: none;
+  }
+
+  /* Amount + Note side by side */
+  .formTopRow {
+    flex-direction: row;
+    gap: var(--spacing-4);
+    align-items: flex-end;
+  }
+
+  .amountField {
+    flex: 0 0 180px;
+  }
+
+  .noteField {
+    flex: 1;
+  }
+
+  /* Category: 5 columns on desktop — 14 items = 2 full rows + 4 in row 3.
+     Item 13 reverts to single-col; item 14 spans 2 to fill col 4-5. */
+  .categoryGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .categoryGrid .categoryChip:nth-child(13) {
+    grid-column: span 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .categoryGrid .categoryChip:nth-child(14) {
+    grid-column: span 2;
+  }
+
+  .categoryChip {
+    min-height: 64px;
+    gap: 6px;
+  }
+
+  .categoryChipLabel {
+    font-size: var(--font-size-caption);
+  }
+
+  /* Transaction list slightly more airy */
+  .txRow {
+    padding: var(--spacing-2) var(--spacing-4);
+    gap: var(--spacing-3);
+  }
+
+  /* CSV preview rows */
+  .csvPreviewRow {
+    padding: var(--spacing-2) var(--spacing-4);
+  }
+
+  /* CTA left-aligned */
+  .cta {
+    align-items: flex-start;
+    padding-bottom: 0;
+    padding-top: var(--spacing-3);
+  }
+
+  .ctaButton {
+    max-width: 384px;
+  }
+
+  .ctaHint {
+    text-align: left;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .wrap,
+  .txRow,
+  .csvPreview { animation: none; }
+
+  .categoryChip,
+  .ctaButton,
+  .addButton,
+  .importButton { transition: none; transform: none !important; }
+}

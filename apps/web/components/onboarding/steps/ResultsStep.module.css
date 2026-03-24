@@ -1,0 +1,306 @@
+/* ─────────────────────────────────────────────────────────────
+   ResultsStep
+   Mobile (375px base):
+     Stacked — ring hero (centered) → feedback → domain bars → CTA
+
+   Desktop (1024px+):
+     Two-column grid — ring+tier LEFT spanning both rows
+                     — feedback+domains RIGHT top, CTA RIGHT bottom
+   ───────────────────────────────────────────────────────────── */
+
+/* Register --ring-offset so CSS can interpolate it in @keyframes */
+@property --ring-offset {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 326.73;
+}
+
+/* ── Wrap ── */
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-3);
+  padding-bottom: var(--spacing-5);
+  animation: slideInRight 0.35s ease both;
+}
+
+@media (min-width: 1024px) {
+  .wrap {
+    flex: initial;
+    display: grid;
+    grid-template-columns: 208px 1fr;
+    grid-template-rows: 1fr auto;
+    gap: var(--spacing-4) var(--spacing-6);
+    align-items: start;
+    padding-top: var(--spacing-4);
+    padding-bottom: 0;
+  }
+}
+
+/* ── Hero: ring + tier badge + caption ── */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    justify-content: center;
+    padding-top: var(--spacing-3);
+  }
+}
+
+/* ── SVG ring ── */
+.ringWrap {
+  position: relative;
+  width: 160px;  /* 8pt grid: 8 × 20 */
+  height: 160px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .ringWrap {
+    width: 176px;  /* 8pt grid: 8 × 22 */
+    height: 176px;
+  }
+}
+
+.ring {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Track — empty background circle */
+.ringTrack {
+  fill: none;
+  stroke: var(--color-divider);
+  stroke-width: 11;
+}
+
+/* Fill — animated arc, starts at 12 o'clock */
+.ringFill {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-dasharray: 326.73;
+  stroke-dashoffset: var(--ring-offset);
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  animation: ringReveal 1.1s cubic-bezier(0.4, 0, 0.2, 1) 300ms both;
+}
+
+@keyframes ringReveal {
+  from { stroke-dashoffset: 326.73; }
+  to   { stroke-dashoffset: var(--ring-offset); }
+}
+
+/* Score centered inside the ring */
+.ringCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ringScore {
+  font-size: 52px;
+  font-weight: var(--font-weight-extrabold);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--color-text-primary);
+  animation: fadeIn 0.3s ease 900ms both;
+}
+
+.ringTotal {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-placeholder);
+  margin-top: var(--spacing-micro);
+  animation: fadeIn 0.3s ease 1000ms both;
+}
+
+/* ── Tier badge ── */
+.tier {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  background: var(--badge-bg, var(--color-primary-subtle));
+  border: 1px solid var(--badge-border, var(--color-border));
+  border-radius: var(--radius-badge);
+  padding: var(--spacing-1) var(--spacing-2);
+  animation: fadeInUp 0.4s ease 1050ms both;
+}
+
+.tierLabel {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+}
+
+/* Caption below tier badge */
+.heroCaption {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-placeholder);
+  font-weight: var(--font-weight-medium);
+  animation: fadeIn 0.3s ease 1150ms both;
+}
+
+/* ── Content column: feedback + domains ── */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+@media (min-width: 1024px) {
+  .content {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+/* ── Feedback text ── */
+.feedbackText {
+  font-size: var(--font-size-body-secondary);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-body);
+  color: var(--color-text-secondary);
+  background: var(--color-background);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-card-sm);
+  padding: var(--spacing-3);
+  animation: fadeInUp 0.4s ease 200ms both;
+}
+
+/* ── Domain breakdown ── */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  animation: fadeInUp 0.4s ease 350ms both;
+}
+
+.breakdownHeading {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-placeholder);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.domainRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.domainMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.domainLabel {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-transform: capitalize;
+}
+
+.domainScore {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  /* color set inline: blue=budgeting, red=debt, green=savings */
+}
+
+.domainTrack {
+  height: var(--spacing-1);  /* 8px */
+  border-radius: var(--radius-badge);
+  background: var(--color-divider);
+  overflow: hidden;
+}
+
+.domainFill {
+  height: 100%;
+  border-radius: var(--radius-badge);
+  background: var(--domain-color, var(--color-primary));
+  animation: domainGrow 700ms ease-out 550ms both;
+}
+
+@keyframes domainGrow {
+  from { width: 0; }
+  to   { width: var(--domain-pct); }
+}
+
+/* ── CTA ── */
+.cta {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .cta {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+  }
+}
+
+.ctaButton {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  height: 56px;
+  border-radius: var(--radius-button);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  transition:
+    background var(--transition-button),
+    box-shadow var(--transition-button),
+    transform var(--transition-button);
+}
+
+.ctaButton:hover {
+  background: var(--color-primary-hover);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-primary) 25%, transparent);
+  transform: translateY(-2px);
+}
+
+.ctaButton:active { transform: translateY(0); }
+
+.ctaButton:focus-visible {
+  outline: 3px solid var(--color-primary-focus);
+  outline-offset: 2px;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .wrap          { animation: none; }
+  .ringFill      { animation: none; }
+  .domainFill    { animation: none; width: var(--domain-pct); }
+  .tier,
+  .heroCaption,
+  .ringScore,
+  .ringTotal,
+  .feedbackText,
+  .breakdown     { animation: none; opacity: 1; transform: none; }
+}

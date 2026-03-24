@@ -1,0 +1,90 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+/* Label row — single label when no addon, space-between when addon present */
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.inputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-input);
+  background: var(--color-surface);
+  transition: border-color var(--transition-button), box-shadow var(--transition-button);
+}
+
+.inputWrap:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-input-focus);
+}
+
+.inputWrapError {
+  border-color: var(--color-danger);
+}
+
+.inputWrapError:focus-within {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 12%, transparent);
+}
+
+.input {
+  flex: 1;
+  height: var(--touch-target-preferred);
+  padding: 0 var(--spacing-3);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  min-width: 0;
+}
+
+.input::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.passwordToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  transition: color var(--transition-button);
+  border-radius: var(--radius-input);
+  margin-right: var(--spacing-micro);
+}
+
+.passwordToggle:hover {
+  color: var(--color-text-secondary);
+}
+
+.passwordToggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.errorText {
+  font-size: var(--font-size-caption);
+  color: var(--color-danger);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}

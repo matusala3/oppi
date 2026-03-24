@@ -1,0 +1,120 @@
+.shapes {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ── Positions ── */
+.euro {
+  top: 80px;
+  right: 64px;
+  font-size: 48px;
+  font-weight: var(--font-weight-bold);
+  animation-delay: 0s;
+}
+
+.percent {
+  bottom: 160px;
+  left: 48px;
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+  animation-delay: 1.2s;
+}
+
+.rectTop {
+  top: 64px;
+  left: 80px;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-card);
+  rotate: 12deg;
+  animation-delay: 0.5s;
+}
+
+.circleBottom {
+  bottom: 112px;
+  right: 40px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  animation-delay: 1.8s;
+}
+
+.diamondMid {
+  top: 33%;
+  right: 25%;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-card-sm);
+  rotate: 45deg;
+  animation-delay: 0.8s;
+}
+
+.dotGrid {
+  position: absolute;
+  bottom: 64px;
+  left: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-2);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.ring {
+  top: 66%;
+  right: 80px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  animation-delay: 2.2s;
+}
+
+/* ══════════════════════════════════════
+   panel variant — white translucent (on blue bg)
+══════════════════════════════════════ */
+.panel .euro,
+.panel .percent {
+  color: rgba(255, 255, 255, 0.06);
+}
+
+.panel .rectTop    { background: rgba(255, 255, 255, 0.04); }
+.panel .circleBottom { background: rgba(255, 255, 255, 0.05); }
+.panel .diamondMid { background: rgba(255, 255, 255, 0.04); }
+.panel .dotGrid    { opacity: 0.08; }
+.panel .dot        { background: white; }
+.panel .ring       { border: 2px solid rgba(255, 255, 255, 0.06); }
+
+/* ══════════════════════════════════════
+   mobile variant — primary-tinted (on white bg)
+══════════════════════════════════════ */
+.mobile .euro,
+.mobile .percent {
+  color: color-mix(in srgb, var(--color-primary) 7%, transparent);
+}
+
+.mobile .rectTop      { background: color-mix(in srgb, var(--color-primary)  4%, transparent); }
+.mobile .circleBottom { background: color-mix(in srgb, var(--color-success)   5%, transparent); }
+.mobile .diamondMid   { background: color-mix(in srgb, var(--color-premium)   4%, transparent); }
+.mobile .dotGrid      { opacity: 1; }
+.mobile .dot          { background: color-mix(in srgb, var(--color-primary)  12%, transparent); }
+.mobile .ring         { border: 2px solid color-mix(in srgb, var(--color-primary) 6%, transparent); }
+
+/* mobile only shows below lg */
+.mobile {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .mobile { display: none; }
+}

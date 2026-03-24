@@ -1,0 +1,17 @@
+{
+  "name": "oppi",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:web": "turbo run dev --filter=@oppi/web",
+    "dev:mobile": "pnpm --filter=@oppi/mobile start",
+    "dev:auth": "turbo run dev --filter=@oppi/auth-service",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "turbo": "^2"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

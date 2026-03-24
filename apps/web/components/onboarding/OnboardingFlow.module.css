@@ -1,0 +1,89 @@
+/* ── Shell ── */
+.shell {
+  display: flex;
+  min-height: 100dvh;
+  background: var(--color-background);
+}
+
+/* ══════════════════════════════════════
+   Right content pane
+══════════════════════════════════════ */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  padding: 0 var(--spacing-4);
+  position: relative;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .content { padding: 0 var(--spacing-5); }
+}
+
+@media (min-width: 1024px) {
+  .content {
+    background: transparent;
+    padding: 0 var(--spacing-6);
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1280px) {
+  .content { padding: 0 var(--spacing-7); }
+}
+
+/* ── Mobile header (back + progress bar) ── */
+.mobileHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding-top: var(--spacing-4);
+  padding-bottom: var(--spacing-3);
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .mobileHeader { display: none; }
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
+  flex-shrink: 0;
+  border-radius: var(--radius-input);
+  background: var(--color-background-subtle);
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: background var(--transition-button);
+}
+
+.backButton:hover {
+  background: var(--color-border);
+}
+
+.backButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--radius-badge);
+  background: var(--color-divider);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  width: var(--progress-width);
+  border-radius: var(--radius-badge);
+  background: var(--color-primary);
+  transition: width 400ms ease;
+}

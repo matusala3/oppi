@@ -1,0 +1,253 @@
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+  padding-top: var(--spacing-4);
+  animation: slideInRight 0.35s ease both;
+}
+
+/* ── Mobile-only step header ── */
+.stepHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-micro);
+}
+
+.stepTitle {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+}
+
+.stepSubtitle {
+  font-size: var(--font-size-body-secondary);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ── Question block ── */
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.questionTitle {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+}
+
+/* ── Options grid — 2 columns ── */
+.optionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2);
+}
+
+/* ── Option button ── */
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-1);
+  padding: var(--spacing-3);
+  min-height: 80px;
+  border-radius: var(--radius-card);
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color var(--transition-button),
+    background var(--transition-button),
+    box-shadow var(--transition-button),
+    transform var(--transition-button);
+}
+
+.option:hover {
+  border-color: var(--color-text-placeholder);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.optionSelected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  box-shadow: var(--shadow-card-elevated);
+  transform: translateY(-1px);
+}
+
+/* ── Full-width option (e.g. "Other" — odd item in 2-col grid) ── */
+.optionFull {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  min-height: var(--touch-target-preferred);
+  gap: var(--spacing-3);
+}
+
+/* ── Confidence grid — 1 col on mobile (stacked rows) ── */
+.confidenceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-2);
+}
+
+/* Confidence options are always row layout regardless of breakpoint */
+.confidenceOption {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-3);
+  min-height: var(--touch-target-preferred);
+}
+
+/* ── Icon inside option ── */
+.optionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-input);
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  transition:
+    background var(--transition-button),
+    color var(--transition-button);
+}
+
+.optionIconSelected {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.optionLabel {
+  font-size: var(--font-size-body-secondary);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+}
+
+/* ── CTA ── */
+.cta {
+  margin-top: auto;
+  padding-top: var(--spacing-3);
+  padding-bottom: 40px;
+  flex-shrink: 0;
+}
+
+.ctaButton {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  height: 56px;
+  border-radius: var(--radius-button);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  transition:
+    background var(--transition-button),
+    box-shadow var(--transition-button),
+    transform var(--transition-button);
+}
+
+.ctaButton:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-primary) 25%, transparent);
+  transform: translateY(-2px);
+}
+
+.ctaButton:active:not(:disabled) { transform: translateY(0); }
+
+.ctaButton:disabled {
+  background: var(--color-divider);
+  color: var(--color-text-placeholder);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.ctaButton:focus-visible {
+  outline: 2px solid var(--color-primary-focus);
+  outline-offset: 2px;
+}
+
+/* ══════════════════════════════════════
+   Desktop — genuinely redesigned layout
+══════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .wrap {
+    flex: initial;
+    max-width: 600px;
+    gap: var(--spacing-6);
+    padding-top: var(--spacing-5);
+  }
+
+  /* Brand panel handles the heading context on desktop */
+  .stepHeader {
+    display: none;
+  }
+
+  .questionTitle {
+    font-size: var(--font-size-h2);
+  }
+
+  /* Q1 (5 options): 3 cols → "Other" spans 2 */
+  .question:nth-of-type(1) .optionsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Q2 (6 module options): 3 cols — 2 rows */
+  .question:nth-of-type(2) .optionsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Q3 confidence: 3 equal cols — single row */
+  .confidenceGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* All cards switch to horizontal row layout on desktop */
+  .option {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-3);
+    min-height: 64px;
+    padding: var(--spacing-3) var(--spacing-3);
+  }
+
+  /* "Other" on desktop: spans 2 of 3 columns to balance the grid */
+  .optionFull {
+    grid-column: span 2;
+  }
+
+  .cta {
+    padding-bottom: 0;
+    padding-top: var(--spacing-4);
+  }
+
+  .ctaButton {
+    max-width: 360px;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .wrap { animation: none; }
+  .option { transition: none; transform: none !important; }
+}

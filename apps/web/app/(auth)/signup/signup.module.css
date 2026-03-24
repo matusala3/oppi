@@ -1,0 +1,46 @@
+/* ── Password group: tightly wraps the field + strength meter ── */
+.passwordGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+/* ── Password strength meter ── */
+.strengthMeter {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.strengthBars {
+  display: flex;
+  flex: 1;
+  gap: var(--spacing-micro);
+}
+
+.strengthBar {
+  flex: 1;
+  height: var(--spacing-micro);
+  border-radius: var(--radius-badge);
+  background: var(--color-divider);
+  transition: background 250ms ease;
+}
+
+/* Active segment colors */
+.strengthBarWeak   { background: var(--color-danger); }
+.strengthBarFair   { background: var(--color-warning); }
+.strengthBarStrong { background: var(--color-success); }
+
+.strengthLabel {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  min-width: 40px;
+  text-align: right;
+  transition: color 250ms ease;
+}
+
+/* Label colors — use hover variants for readable contrast on white */
+.strengthLabelWeak   { color: var(--color-danger); }
+.strengthLabelFair   { color: var(--color-warning-hover); }
+.strengthLabelStrong { color: var(--color-success-hover); }
