@@ -32,6 +32,7 @@ apps/web/traces/
 
 # ── Docs ──────────────────────────────────────────────
 docs/
+.claude/
 
 # ── AWS CDK ───────────────────────────────────────────
 infrastructure/cdk/cdk.out/
