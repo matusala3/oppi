@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, UnauthorizedException, Inject } from '@nestjs/common'
+import { Injectable, ConflictException, UnauthorizedException, Inject, OnModuleInit } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { eq, and } from 'drizzle-orm'
 import { createHash } from 'crypto'
@@ -11,11 +11,19 @@ import { RegisterDto } from './dto/register.dto'
 import { LoginDto } from './dto/login.dto'
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
+  private dummyHash!: string
+
   constructor(
     @Inject(DATABASE) private readonly db: Database,
     private readonly jwtService: JwtService,
   ) {}
+
+  async onModuleInit(): Promise<void> {
+    // Pre-computed at startup — used in login to prevent timing attacks
+    // Both "user not found" and "wrong password" paths take ~250ms
+    this.dummyHash = await bcrypt.hash('dummy-password-for-timing-protection', 12)
+  }
 
   async register(dto: RegisterDto): Promise<AuthResponse> {
     const existing = await this.db
@@ -29,12 +37,18 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(dto.password, 12)
 
-    const [user] = await this.db
-      .insert(schema.users)
-      .values({ email: dto.email, passwordHash })
-      .returning()
+    // Transaction ensures both user + refresh token are inserted atomically
+    // If refresh token insert fails, user insert is rolled back — no ghost users
+    const { user, tokens } = await this.db.transaction(async (tx) => {
+      const [newUser] = await tx
+        .insert(schema.users)
+        .values({ email: dto.email, passwordHash })
+        .returning()
 
-    const tokens = await this.issueTokens(user.id, user.email)
+      const issuedTokens = await this.issueTokens(newUser.id, newUser.email, tx)
+
+      return { user: newUser, tokens: issuedTokens }
+    })
 
     // TODO: publish UserRegisteredEvent to SNS
     // topic: oppi-user-events
@@ -50,12 +64,12 @@ export class AuthService {
       .from(schema.users)
       .where(eq(schema.users.email, dto.email))
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials')
-    }
+    // Always run bcrypt even when user not found — prevents timing attacks
+    // Without this, attacker can detect registered emails by measuring response time
+    const hashToCompare = user ? user.passwordHash : this.dummyHash
+    const passwordMatch = await bcrypt.compare(dto.password, hashToCompare)
 
-    const passwordMatch = await bcrypt.compare(dto.password, user.passwordHash)
-    if (!passwordMatch) {
+    if (!user || !passwordMatch) {
       throw new UnauthorizedException('Invalid credentials')
     }
 
@@ -66,30 +80,34 @@ export class AuthService {
   async refresh(userId: string, rawRefreshToken: string): Promise<TokenPair> {
     const tokenHash = this.hashToken(rawRefreshToken)
 
-    const [stored] = await this.db
-      .select()
-      .from(schema.refreshTokens)
-      .where(
-        and(
-          eq(schema.refreshTokens.userId, userId),
-          eq(schema.refreshTokens.tokenHash, tokenHash),
-        ),
-      )
+    // Transaction ensures old token is deleted and new token is inserted atomically
+    // If new token insert fails, old token deletion is rolled back — user not locked out
+    return await this.db.transaction(async (tx) => {
+      const [stored] = await tx
+        .select()
+        .from(schema.refreshTokens)
+        .where(
+          and(
+            eq(schema.refreshTokens.userId, userId),
+            eq(schema.refreshTokens.tokenHash, tokenHash),
+          ),
+        )
 
-    if (!stored || stored.expiresAt < new Date()) {
-      throw new UnauthorizedException('Invalid or expired refresh token')
-    }
+      if (!stored || stored.expiresAt < new Date()) {
+        throw new UnauthorizedException('Invalid or expired refresh token')
+      }
 
-    await this.db
-      .delete(schema.refreshTokens)
-      .where(eq(schema.refreshTokens.id, stored.id))
+      await tx
+        .delete(schema.refreshTokens)
+        .where(eq(schema.refreshTokens.id, stored.id))
 
-    const [user] = await this.db
-      .select()
-      .from(schema.users)
-      .where(eq(schema.users.id, userId))
+      const [user] = await tx
+        .select()
+        .from(schema.users)
+        .where(eq(schema.users.id, userId))
 
-    return this.issueTokens(user.id, user.email)
+      return this.issueTokens(user.id, user.email, tx)
+    })
   }
 
   async logout(userId: string, rawRefreshToken: string): Promise<void> {
@@ -105,7 +123,11 @@ export class AuthService {
       )
   }
 
-  private async issueTokens(userId: string, email: string): Promise<TokenPair> {
+  private async issueTokens(
+    userId: string,
+    email: string,
+    tx?: Database,
+  ): Promise<TokenPair> {
     const payload: Pick<JwtPayload, 'sub' | 'email'> = { sub: userId, email }
 
     const accessToken = this.jwtService.sign(payload, {
@@ -118,7 +140,8 @@ export class AuthService {
       expiresIn: '7d',
     })
 
-    await this.db.insert(schema.refreshTokens).values({
+    const db = tx ?? this.db
+    await db.insert(schema.refreshTokens).values({
       userId,
       tokenHash: this.hashToken(refreshToken),
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),

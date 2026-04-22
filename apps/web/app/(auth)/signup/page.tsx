@@ -96,28 +96,19 @@ export default function SignupPage() {
     setErrors({})
     setIsLoading(true)
 
-    try {
-      // TODO: POST /api/auth/signup
-      // const res = await fetch('/api/auth/signup', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ name, email, password, onboardingData }),
-      // })
-      // if (!res.ok) {
-      //   const body = await res.json()
-      //   if (body.code === 'EMAIL_TAKEN') {
-      //     setErrors({ email: 'An account with this email already exists.' })
-      //   } else {
-      //     setErrors({ form: 'Something went wrong. Please try again.' })
-      //   }
-      //   return
-      // }
-      console.log('Signup payload:', { name, email, onboardingData })
-      sessionStorage.removeItem('oppi_onboarding_data')
-      router.push('/onboarding/first-entry')
-    } finally {
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+    if (!res.ok) {
+      const { error } = await res.json() as { error: string }
+      setErrors({ form: error })
       setIsLoading(false)
+      return
     }
+    sessionStorage.removeItem('oppi_onboarding_data')
+    router.push('/onboarding/first-entry')
   }
 
   // Show strength meter only while typing, before a validation error is shown
@@ -145,7 +136,7 @@ export default function SignupPage() {
               label="Full name"
               type="text"
               value={name}
-              onChange={setName}
+              onChange={v => { setName(v); setErrors(prev => ({ ...prev, name: undefined })) }}
               error={errors.name}
               placeholder="Mikael Virtanen"
               autoComplete="name"
@@ -155,7 +146,7 @@ export default function SignupPage() {
               label="Email address"
               type="email"
               value={email}
-              onChange={setEmail}
+              onChange={v => { setEmail(v); setErrors(prev => ({ ...prev, email: undefined })) }}
               error={errors.email}
               placeholder="mikael@email.fi"
               autoComplete="email"
@@ -166,7 +157,7 @@ export default function SignupPage() {
                 label="Password"
                 type="password"
                 value={password}
-                onChange={setPassword}
+                onChange={v => { setPassword(v); setErrors(prev => ({ ...prev, password: undefined })) }}
                 error={errors.password}
                 placeholder="Min. 8 characters"
                 autoComplete="new-password"
@@ -210,7 +201,7 @@ export default function SignupPage() {
           <button
             type="submit"
             className={`${pageStyles.submitButton} ${isLoading ? pageStyles.submitButtonLoading : ''}`}
-            disabled={isLoading}
+            disabled={isLoading || !name.trim() || !email.trim() || !password}
           >
             <span>{isLoading ? 'Creating account…' : 'Create account'}</span>
             {isLoading

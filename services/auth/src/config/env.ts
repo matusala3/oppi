@@ -10,6 +10,8 @@ const envSchema = z.object({
   AWS_ENDPOINT_URL: z.string().optional(),
   AWS_ACCESS_KEY_ID: z.string().optional(),
   AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  CORS_ORIGIN: z.string().default('http://localhost:3000,http://localhost:19006'),
+  REDIS_URL: z.string().default('redis://localhost:6379'),
 })
 
 export type Env = z.infer<typeof envSchema>

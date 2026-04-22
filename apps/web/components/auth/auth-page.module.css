@@ -118,9 +118,22 @@
   outline-offset: 2px;
 }
 
-.submitButtonLoading {
-  opacity: 0.7;
+/* Empty-fields disabled: gray per design system (gray-200 bg / gray-400 text) */
+.submitButton:disabled {
+  background: var(--color-divider);
+  color: var(--color-text-placeholder);
+  box-shadow: none;
   cursor: not-allowed;
+}
+
+/* Loading state: stays blue, dots animate — override the gray :disabled above */
+.submitButtonLoading,
+.submitButtonLoading:disabled {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 /* ── Loading dots (replaces spinner) ── */

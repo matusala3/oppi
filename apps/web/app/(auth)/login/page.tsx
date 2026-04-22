@@ -8,8 +8,6 @@ import { AuthShell } from '@/components/auth/AuthShell'
 import { AuthFormField } from '@/components/auth/AuthFormField'
 import styles from '@/components/auth/auth-page.module.css'
 
-// TODO: Redirect to /dashboard if a valid session token already exists
-
 const FEATURES = [
   { Icon: BarChart3,      text: 'See all your spending in one place' },
   { Icon: GraduationCap, text: 'Learn as you track' },
@@ -52,19 +50,18 @@ export default function LoginPage() {
     setErrors({})
     setIsLoading(true)
 
-    try {
-      // TODO: POST /api/auth/login
-      // const res = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // })
-      // if (!res.ok) { setErrors({ form: 'Incorrect email or password.' }); return }
-      console.log('Login payload:', { email })
-      router.push('/dashboard')
-    } finally {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+    if (!res.ok) {
+      const { error } = await res.json() as { error: string }
+      setErrors({ form: error })
       setIsLoading(false)
+      return
     }
+    router.push('/dashboard')
   }
 
   return (
@@ -86,7 +83,7 @@ export default function LoginPage() {
               label="Email address"
               type="email"
               value={email}
-              onChange={setEmail}
+              onChange={v => { setEmail(v); setErrors(prev => ({ ...prev, email: undefined })) }}
               error={errors.email}
               placeholder="mikael@email.fi"
               autoComplete="email"
@@ -96,7 +93,7 @@ export default function LoginPage() {
               label="Password"
               type="password"
               value={password}
-              onChange={setPassword}
+              onChange={v => { setPassword(v); setErrors(prev => ({ ...prev, password: undefined })) }}
               error={errors.password}
               placeholder="Your password"
               autoComplete="current-password"
@@ -121,7 +118,7 @@ export default function LoginPage() {
           <button
             type="submit"
             className={`${styles.submitButton} ${isLoading ? styles.submitButtonLoading : ''}`}
-            disabled={isLoading}
+            disabled={isLoading || !email.trim() || !password}
           >
             <span>{isLoading ? 'Signing in…' : 'Sign in'}</span>
             {isLoading
