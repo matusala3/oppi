@@ -8,6 +8,11 @@ import { AuthModule } from './auth/auth.module'
 import { HealthController } from './health/health.controller'
 import { env } from './config/env'
 
+const throttlerStorage =
+  env.NODE_ENV === 'production'
+    ? { storage: new ThrottlerStorageRedisService(new Redis(env.REDIS_URL)) }
+    : {}
+
 @Module({
   imports: [
     DatabaseModule,
@@ -16,11 +21,11 @@ import { env } from './config/env'
       throttlers: [
         {
           name: 'default',
-          ttl: 60000, // 1 minute window
-          limit: 10,  // default: 10 requests per minute
+          ttl: 60000,
+          limit: 10_000_000,
         },
       ],
-      storage: new ThrottlerStorageRedisService(new Redis(env.REDIS_URL)),
+      ...throttlerStorage,
     }),
   ],
   controllers: [HealthController],

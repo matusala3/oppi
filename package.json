@@ -11,6 +11,7 @@
     "test": "turbo run test"
   },
   "devDependencies": {
+    "autocannon": "^8.0.0",
     "turbo": "^2"
   },
   "packageManager": "pnpm@9.15.0"
